@@ -1,0 +1,137 @@
+# Trigger Order Channel
+
+### Description[​](#description "Direct link to Description")
+
+Subscribe trigger order channel
+
+Data will be pushed when the trigger plans are opened,cancelled,modified,triggered.
+
+Request Example
+
+```json
+{  
+    "op": "subscribe",  
+    "args": [  
+        {  
+            "instType": "USDT-FUTURES",  
+            "channel": "orders-algo",  
+            "instId": "default"  
+        }  
+    ]  
+}
+```
+
+### Request Parameters[​](#request-parameters "Direct link to Request Parameters")
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| op | String | Yes | Operation, subscribe unsubscribe |
+| args | List<Object> | Yes | List of channels to request subscription |
+| > channel | String | Yes | Channel name:`orders-algo` |
+| > instType | String | Yes | Product type `USDT-FUTURES` USDT-M Futures `COIN-FUTURES` Coin-M Futures `USDC-FUTURES` USDC-M Futures |
+| > instId | String | No | Trading pair |
+
+Response Example
+
+```json
+{  
+    "event": "subscribe",  
+    "arg": {  
+        "instType": "USDT-FUTURES",  
+        "channel": "orders-algo",  
+        "instId": "default"  
+    }  
+}
+```
+
+### Response Parameters[​](#response-parameters "Direct link to Response Parameters")
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| event | String | Event |
+| arg | Object | Subscribed channels |
+| > channel | String | Channel name: orders-algo |
+| > instType | String | Product type `USDT-FUTURES` USDT-M Futures `COIN-FUTURES` Coin-M Futures `USDC-FUTURES` USDC-M Futures |
+| > instId | String | Product ID |
+| code | String | Error code |
+| msg | String | Error message |
+
+Push Data
+
+```json
+{  
+    "action": "snapshot",  
+    "arg": {  
+        "instType": "USDT-FUTURES",  
+        "channel": "orders-algo",  
+        "instId": "default"  
+    },  
+    "data": [  
+        {  
+            "instId": "BTCUSDT",  
+            "orderId": "1",  
+            "clientOid": "1",  
+            "triggerPrice": "27000.000000000",  
+            "triggerType": "fill_price",  
+            "triggerTime": "1695719197612",  
+            "planType": "pl",  
+            "price": "27000.000000000",  
+            "executePrice": "27000.000000000",  
+            "size": "0.020000000",  
+            "actualSize": "0.000000000",  
+            "orderType": "market",  
+            "side": "buy",  
+            "tradeSide": "open",  
+            "posSide": "long",  
+            "marginCoin": "USDT",  
+            "status": "live",  
+            "posMode": "hedge_mode",  
+            "enterPointSource": "web",  
+            "stopSurplusTriggerType": "fill_price",  
+            "stopLossTriggerType": "fill_price",  
+            "stpMode": "cancel_taker",  
+            "cTime": "1695719197612",  
+            "uTime": "1695719197612"  
+        }  
+    ],  
+    "ts": 1695719197733  
+}
+```
+
+### Push Parameters[​](#push-parameters "Direct link to Push Parameters")
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| action | String | Push action |
+| arg | Object | Channels with successful subscription |
+| > channel | String | Channel name: orders-algo |
+| > instType | String | Product type `USDT-FUTURES` USDT-M Futures `COIN-FUTURES` Coin-M Futures `USDC-FUTURES` USDC-M Futures |
+| > instId | String | Product ID delivery contract reference：<https://www.bitget.com/api-doc/common/release-note> |
+| data | List<Object> | Subscription data |
+| > instId | String | Product ID delivery contract reference：<https://www.bitget.com/api-doc/common/release-note> |
+| > orderId | String | Bot order ID |
+| > clientOid | String | Customized bot order ID |
+| > triggerPrice | String | Trigger price |
+| > triggerType | String | Trigger type fill\_price: filled price mark\_price: mark price |
+| > triggerTime | String | Trigger time, ms |
+| > planType | String | Websocket trigger order type. Data will be pushed when modify,cancel,open,triggered the plan types below `pl`:Default value, trigger order `tp`:Partial take profit `sl`:Partial stop loss `ptp`:Position take profit `psl`:Position stop loss `track`:Trailing stop `mtpsl`:Trailing TP/SL |
+| > price | String | Order price |
+| > executePrice | String | Execute price |
+| > size | String | Original order amount in coin |
+| > actualSize | String | Actual number of orders in coin |
+| > orderType | String | Order type limit: limit order market |
+| > side | String | Order direction, |
+| > tradeSide | String | Trade Side trading direction |
+| > posSide | String | Position direction; |
+| > marginCoin | String | Margin coin |
+| > status | String | Order status `live`: plan order created `executed`: executed `fail_execute`: execute failed `cancelled`: cancelled `executing`: executing |
+| > posMode | String | Position mode `one_way_mode`: one-way position mode `hedge_mode`: hedge postion mode |
+| > enterPointSource | String | Order source WEB: Orders created on the website API: Orders created on API SYS: System managed orders, usually generated by forced liquidation logic ANDROID: Orders created on the Android app IOS: Orders created on the iOS app |
+| > stopSurplusPrice | String | Preset/Partial/Position position take-profit execution price;  1. When planType is pl, it represents the preset take-profit execution price. 2. When planType is tp, it represents the partial take-profit execution price. 3. When planType is ptp, it represents the position take-profit execution price. |
+| > stopSurplusTriggerPrice | String | Preset/Partial/Position take-profit trigger price;  1. When planType is pl, it represents the preset take-profit trigger price. 2. When planType is tp, it represents the partial take-profit trigger price. 3. When planType is ptp, it represents the position take-profit trigger price. It is empty when there is nothing. |
+| > stopSurplusTriggerType | String | Preset/Partial/Position take-profit trigger type;  1. When planType is pl, it represents the preset take-profit trigger type. 2. When planType is tp, it represents the partial take-profit trigger type. 3. When planType is ptp, it represents the position take-profit trigger type. It is empty when there is nothing. |
+| > stopLossPrice | String | Preset/Partial/Position stop-loss execution price;  1. When planType is pl, it represents the preset stop-loss execution price. 2. When planType is sl, it represents the partial stop-loss execution price. 3. When planType is psl, it represents the position stop-loss execution price. It is empty when there is nothing. |
+| > stopLossTriggerPrice | String | Preset/Partial/Position stop-loss trigger price;  1. When planType is pl, it represents the preset stop-loss trigger price. 2. When planType is sl, it represents the partial stop-loss trigger price. 3. When planType is psl, it represents the position stop-loss trigger price. |
+| > stopLossTriggerType | String | Preset/Partial/Position stop-loss trigger type;  1. When planType is pl, it represents the preset stop-loss trigger type.  2. When planType is sl, it represents the partial stop-loss trigger type. 3. When planType is psl, it represents the position stop-loss trigger type. It is empty when there is nothing. |
+| > uTime | String | Order update time, Milliseconds format of updated data timestamp Unix, e.g. 1597026383085 |
+| > stpMode | String | STP Mode   `none` not setting STP   `cancel_taker` cancel taker order   `cancel_maker` cancel maker order   `cancel_both` cancel both of taker and maker orders |
